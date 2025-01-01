@@ -9,20 +9,20 @@ import bundledSchema from "./external/bundled.js";
 import { expect } from "vitest";
 
 describe("$Refs object", () => {
-  var isBrowser = typeof window !== "undefined";
+  const isBrowser = typeof window !== "undefined";
   describe("paths", () => {
     it("should only contain the main file when calling `parse()`", async () => {
-      var parser = new $RefParser();
+      const parser = new $RefParser();
       await parser.parse(path.abs("test/specs/external/external.yaml"));
-      var paths = parser.$refs.paths();
+      const paths = parser.$refs.paths();
       expect(paths).to.have.same.members([path.abs("test/specs/external/external.yaml")]);
     });
 
     it("should contain all files when calling `resolve()`", async () => {
-      var parser = new $RefParser();
-      var $refs = await parser.resolve(path.abs("test/specs/external/external.yaml"));
+      const parser = new $RefParser();
+      const $refs = await parser.resolve(path.abs("test/specs/external/external.yaml"));
       expect($refs).to.equal(parser.$refs);
-      var paths = $refs.paths();
+      const paths = $refs.paths();
       expect(paths).to.have.same.members([
         path.abs("test/specs/external/external.yaml"),
         path.abs("test/specs/external/definitions/definitions.json"),
@@ -32,8 +32,8 @@ describe("$Refs object", () => {
     });
 
     it("should return only local files", async () => {
-      var $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
-      var paths = $refs.paths("file");
+      const $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
+      const paths = $refs.paths("file");
       if (!isBrowser) {
         expect(paths).to.have.same.members([
           path.abs("test/specs/external/external.yaml"),
@@ -47,8 +47,8 @@ describe("$Refs object", () => {
     });
 
     it("should return only URLs", async () => {
-      var $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
-      var paths = $refs.paths(["http"]);
+      const $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
+      const paths = $refs.paths(["http"]);
 
       if (isBrowser) {
         expect(paths).to.have.same.members([
@@ -65,13 +65,13 @@ describe("$Refs object", () => {
 
   describe("values", () => {
     it("should be the same as `toJSON()`", async () => {
-      var $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
+      const $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
       expect($refs.values).to.equal($refs.toJSON);
     });
 
     it("should return the paths and values of all resolved files", async () => {
-      var $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
-      var expected = {};
+      const $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
+      const expected = {};
       // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       expected[path.abs("test/specs/external/external.yaml")] = parsedSchema.schema;
       // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
@@ -80,14 +80,14 @@ describe("$Refs object", () => {
       expected[path.abs("test/specs/external/definitions/name.yaml")] = parsedSchema.name;
       // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       expected[path.abs("test/specs/external/definitions/required-string.yaml")] = parsedSchema.requiredString;
-      var values = $refs.values();
+      const values = $refs.values();
       expect(values).to.deep.equal(expected);
     });
 
     it("should return the paths and values of all dereferenced files", async () => {
-      var parser = new $RefParser();
+      const parser = new $RefParser();
       await parser.dereference(path.abs("test/specs/external/external.yaml"));
-      var expected = {};
+      const expected = {};
       // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       expected[path.abs("test/specs/external/external.yaml")] = dereferencedSchema;
       // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
@@ -97,14 +97,14 @@ describe("$Refs object", () => {
       // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       expected[path.abs("test/specs/external/definitions/required-string.yaml")] =
         dereferencedSchema.definitions["required string"];
-      var values = parser.$refs.values();
+      const values = parser.$refs.values();
       expect(values).to.deep.equal(expected);
     });
 
     it("should return the paths and values of all bundled files", async () => {
-      var parser = new $RefParser();
+      const parser = new $RefParser();
       await parser.bundle(path.abs("test/specs/external/external.yaml"));
-      var expected = {};
+      const expected = {};
       // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       expected[path.abs("test/specs/external/external.yaml")] = bundledSchema;
       // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
@@ -114,15 +114,15 @@ describe("$Refs object", () => {
       // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       expected[path.abs("test/specs/external/definitions/required-string.yaml")] =
         bundledSchema.definitions["required string"];
-      var values = parser.$refs.values();
+      const values = parser.$refs.values();
       expect(values).to.deep.equal(expected);
     });
 
     it("should return only local files and values", async () => {
-      var $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
+      const $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
       let values = $refs.values("file");
       if (typeof window === "undefined") {
-        var expected = {};
+        const expected = {};
         // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         expected[path.abs("test/specs/external/external.yaml")] = parsedSchema.schema;
         // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
@@ -139,10 +139,10 @@ describe("$Refs object", () => {
     });
 
     it("should return only URLs and values", async () => {
-      var $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
+      const $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
       let values = $refs.values(["http"]);
       if (isBrowser) {
-        var expected = {};
+        const expected = {};
         // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         expected[path.url("test/specs/external/external.yaml")] = parsedSchema.schema;
         // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
@@ -161,7 +161,7 @@ describe("$Refs object", () => {
 
   describe("exists", () => {
     it("should work with absolute paths", async () => {
-      var $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
+      const $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
       // @ts-expect-error TS(2554): Expected 2 arguments, but got 1.
       expect($refs.exists(path.abs("test/specs/external/external.yaml"))).to.equal(true);
       // @ts-expect-error TS(2554): Expected 2 arguments, but got 1.
@@ -173,7 +173,7 @@ describe("$Refs object", () => {
     });
 
     it("should work with relative paths", async () => {
-      var $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
+      const $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
       // @ts-expect-error TS(2554): Expected 2 arguments, but got 1.
       expect($refs.exists("external.yaml")).to.equal(true);
       // @ts-expect-error TS(2554): Expected 2 arguments, but got 1.
@@ -185,7 +185,7 @@ describe("$Refs object", () => {
     });
 
     it("should return false if the $ref does not exist", async () => {
-      var $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
+      const $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
       // @ts-expect-error TS(2554): Expected 2 arguments, but got 1.
       expect($refs.exists("foo bar")).to.equal(false);
     });
@@ -193,7 +193,7 @@ describe("$Refs object", () => {
 
   describe("get", () => {
     it("should work with absolute paths", async () => {
-      var $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
+      const $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
       expect($refs.get(path.abs("test/specs/external/external.yaml"))).to.deep.equal(parsedSchema.schema);
       expect($refs.get(path.abs("test/specs/external/definitions/definitions.json"))).to.deep.equal(
         parsedSchema.definitions,
@@ -205,7 +205,7 @@ describe("$Refs object", () => {
     });
 
     it("should work with relative paths", async () => {
-      var $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
+      const $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
       expect($refs.get("external.yaml")).to.deep.equal(parsedSchema.schema);
       expect($refs.get("definitions/definitions.json")).to.deep.equal(parsedSchema.definitions);
       expect($refs.get("definitions/name.yaml")).to.deep.equal(parsedSchema.name);
@@ -213,19 +213,19 @@ describe("$Refs object", () => {
     });
 
     it("should get the entire file if there is no hash", async () => {
-      var $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
-      var value = $refs.get("definitions/name.yaml");
+      const $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
+      const value = $refs.get("definitions/name.yaml");
       expect(value).to.deep.equal(parsedSchema.name);
     });
 
     it("should get the entire file if the hash is empty", async () => {
-      var $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
-      var value = $refs.get("definitions/name.yaml#");
+      const $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
+      const value = $refs.get("definitions/name.yaml#");
       expect(value).to.deep.equal(parsedSchema.name);
     });
 
     it('should try to get an empty key if the hash is "#/"', async () => {
-      var $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
+      const $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
 
       try {
         $refs.get("definitions/name.yaml#/");
@@ -238,7 +238,7 @@ describe("$Refs object", () => {
     });
 
     it("should resolve values across multiple files if necessary", async () => {
-      var $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
+      const $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
       expect($refs.get("external.yaml#/properties/name/properties/first")).to.deep.equal({
         title: "required string",
         type: "string",
@@ -248,7 +248,7 @@ describe("$Refs object", () => {
     });
 
     it("should throw an error if the file does not exist", async () => {
-      var $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
+      const $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
 
       try {
         $refs.get("foo-bar.yaml#/some/value");
@@ -263,7 +263,7 @@ describe("$Refs object", () => {
     });
 
     it("should throw an error if the JSON Pointer path does not exist", async () => {
-      var $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
+      const $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
 
       try {
         $refs.get("external.yaml#/foo/bar");
@@ -278,26 +278,26 @@ describe("$Refs object", () => {
 
   describe("set", () => {
     it("should work with absolute paths", async () => {
-      var $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
-      var $ref = path.abs("test/specs/external/external.yaml") + "#/properties/name";
+      const $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
+      const $ref = path.abs("test/specs/external/external.yaml") + "#/properties/name";
       $refs.set($ref, { foo: "bar" });
       expect($refs.get("external.yaml#/properties/name")).to.deep.equal({ foo: "bar" });
     });
 
     it("should work with relative paths", async () => {
-      var $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
+      const $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
       $refs.set("external.yaml#/properties/name", { foo: "bar" });
       expect($refs.get("external.yaml#/properties/name")).to.deep.equal({ foo: "bar" });
     });
 
     it("should resolve values across multiple files if necessary", async () => {
-      var $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
+      const $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
       $refs.set("external.yaml#/properties/name/properties/first/title", "foo bar");
       expect($refs.get("external.yaml#/properties/name/properties/first/title")).to.equal("foo bar");
     });
 
     it("should throw an error if the file does not exist", async () => {
-      var $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
+      const $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
 
       try {
         $refs.set("foo-bar.yaml#/some/path", "some value");
@@ -312,7 +312,7 @@ describe("$Refs object", () => {
     });
 
     it("should NOT throw an error if the JSON Pointer path does not exist (it creates the new value instead)", async () => {
-      var $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
+      const $refs = await $RefParser.resolve(path.abs("test/specs/external/external.yaml"));
       $refs.set("external.yaml#/foo/bar/baz", { hello: "world" });
       expect($refs.get("external.yaml#/foo/bar/baz")).to.deep.equal({ hello: "world" });
     });

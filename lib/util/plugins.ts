@@ -36,7 +36,7 @@ export function filter(plugins: Plugin[], method: any, file: any) {
  * Sorts the given plugins, in place, by their `order` property.
  */
 export function sort(plugins: Plugin[]) {
-  for (const plugin of plugins) {
+  for (var plugin of plugins) {
     plugin.order = plugin.order || Number.MAX_SAFE_INTEGER;
   }
 
@@ -81,7 +81,7 @@ export async function run<S extends object = JSONSchema, O extends ParserOptions
 
       try {
         // console.log('  %s', plugin.name);
-        const result = getResult(plugin, method, file, callback, $refs);
+        var result = getResult(plugin, method, file, callback, $refs);
         if (result && typeof result.then === "function") {
           // A promise was returned
           result.then(onSuccess, onError);
@@ -136,7 +136,7 @@ function getResult<S extends object = JSONSchema, O extends ParserOptions<S> = P
   callback?: (err?: Error, result?: any) => void,
   $refs?: $Refs<S, O>,
 ) {
-  const value = obj[prop as keyof typeof obj] as unknown;
+  var value = obj[prop as keyof typeof obj] as unknown;
 
   if (typeof value === "function") {
     return value.apply(obj, [file, callback, $refs]);

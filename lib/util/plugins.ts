@@ -65,9 +65,9 @@ export async function run<S extends object = JSONSchema, O extends ParserOptions
   file: FileInfo,
   $refs: $Refs<S, O>,
 ) {
-  const plugin: Plugin;
-  const lastError: PluginResult<S>;
-  const index = 0;
+  let plugin: Plugin;
+  let lastError: PluginResult<S>;
+  let index = 0;
 
   return new Promise<PluginResult<S>>((resolve, reject) => {
     runNextPlugin();

@@ -10,9 +10,9 @@ import type { Options } from "../../../lib/options";
 import type { ParserOptions } from "../../../lib/options";
 
 describe("References to non-JSON files", () => {
-  let baseUrl = path.rel("test/specs/parsers/parsers.yaml");
+  const baseUrl = path.rel("test/specs/parsers/parsers.yaml");
   it("should parse successfully", async () => {
-    let schema = await $RefParser.parse(baseUrl);
+    const schema = await $RefParser.parse(baseUrl);
     expect(schema).to.deep.equal(parsedSchema.schema);
   });
 
@@ -38,8 +38,8 @@ describe("References to non-JSON files", () => {
   );
 
   it("should dereference successfully", async () => {
-    let parser = new $RefParser();
-    let schema = await parser.dereference(baseUrl);
+    const parser = new $RefParser();
+    const schema = await parser.dereference(baseUrl);
     expect(schema).to.equal(parser.schema);
     // @ts-expect-error TS(2532): Object is possibly 'undefined'.
     schema.definitions.binary = helper.convertNodeBuffersToPOJOs(schema.definitions.binary);
@@ -49,13 +49,13 @@ describe("References to non-JSON files", () => {
   });
 
   it("should bundle successfully", async () => {
-    let schema = await $RefParser.bundle(baseUrl);
+    const schema = await $RefParser.bundle(baseUrl);
     schema.definitions!.binary = helper.convertNodeBuffersToPOJOs(schema.definitions!.binary);
     expect(schema).to.deep.equal(dereferencedSchema.defaultParsers);
   });
 
   it('should parse text as binary if "parse.text" is disabled', async () => {
-    let opts = {
+    const opts = {
       parse: {
         // Disable the text parser
         text: false,
@@ -67,8 +67,8 @@ describe("References to non-JSON files", () => {
         },
       },
     } as Options;
-    let schema = await $RefParser.dereference(baseUrl, opts);
-    let definitions = schema.definitions!;
+    const schema = await $RefParser.dereference(baseUrl, opts);
+    const definitions = schema.definitions!;
     definitions.markdown = helper.convertNodeBuffersToPOJOs(definitions.markdown);
     definitions.html = helper.convertNodeBuffersToPOJOs(definitions.html);
     definitions.css = helper.convertNodeBuffersToPOJOs(definitions.css);
@@ -136,7 +136,7 @@ describe("References to non-JSON files", () => {
   });
 
   it("should use a custom parser with static values", async () => {
-    let schema = await $RefParser.dereference(baseUrl, {
+    const schema = await $RefParser.dereference(baseUrl, {
       parse: {
         // A custom parser that always returns the same value
         staticParser: {
@@ -150,7 +150,7 @@ describe("References to non-JSON files", () => {
   });
 
   it("should use a custom parser that returns a value", async () => {
-    let schema = await $RefParser.dereference(baseUrl, {
+    const schema = await $RefParser.dereference(baseUrl, {
       parse: {
         // A custom parser that returns the contents of ".foo" files, in reverse
         reverseFooParser: {
@@ -168,13 +168,13 @@ describe("References to non-JSON files", () => {
   });
 
   it("should use a custom parser that calls a callback", async () => {
-    let schema = await $RefParser.dereference(baseUrl, {
+    const schema = await $RefParser.dereference(baseUrl, {
       parse: {
         // A custom parser that returns the contents of ".foo" files, in reverse
         reverseFooParser: {
           canParse: /\.FOO$/i,
           parse(file: any, callback: any) {
-            let reversed = file.data.toString().split("").reverse().join("");
+            const reversed = file.data.toString().split("").reverse().join("");
             callback(null, reversed);
           },
         },
@@ -185,13 +185,13 @@ describe("References to non-JSON files", () => {
   });
 
   it("should use a custom parser that returns a promise", async () => {
-    let schema = await $RefParser.dereference(baseUrl, {
+    const schema = await $RefParser.dereference(baseUrl, {
       parse: {
         // A custom parser that returns the contents of ".foo" files, in reverse
         reverseFooParser: {
           canParse: [".foo"],
           async parse(file: any) {
-            let reversed = await new Promise((resolve) => {
+            const reversed = await new Promise((resolve) => {
               resolve(file.data.toString().split("").reverse().join(""));
             });
             return reversed;
@@ -204,7 +204,7 @@ describe("References to non-JSON files", () => {
   });
 
   it("should continue parsing if a custom parser fails", async () => {
-    let schema = await $RefParser.dereference(baseUrl, {
+    const schema = await $RefParser.dereference(baseUrl, {
       parse: {
         // A custom parser that always fails,
         // so the built-in parsers will be used as a fallback
@@ -247,7 +247,7 @@ describe("References to non-JSON files", () => {
 
   it("should throw a grouped error if no parser can be matched and continueOnError is true", async () => {
     try {
-      let parser = new $RefParser();
+      const parser = new $RefParser();
 
       await parser.dereference(baseUrl, {
         parse: {

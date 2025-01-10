@@ -1,7 +1,7 @@
 import { describe, it } from "vitest";
 import { expect } from "vitest";
 import $RefParser from "../../../lib/index.js";
-let schema = {
+const schema = {
   type: "object",
   allOf: [
     {
@@ -106,7 +106,7 @@ let schema = {
 describe("Schema with nested pointers", () => {
   it("should throw an error for missing pointer", async () => {
     // todo - get original schema from #338
-    let bundle = await $RefParser.bundle(schema);
+    const bundle = await $RefParser.bundle(schema);
     expect(bundle).to.equal(schema);
   });
 });

@@ -73,11 +73,11 @@ export class $RefParser<S extends object = JSONSchema, O extends ParserOptions<S
   public parse(path: string, schema: S | string | unknown, options: O): Promise<S>;
   public parse(path: string, schema: S | string | unknown, options: O, callback: SchemaCallback<S>): Promise<void>;
   async parse() {
-    var args = normalizeArgs<S, O>(arguments as any);
+    const args = normalizeArgs<S, O>(arguments as any);
     let promise;
 
     if (!args.path && !args.schema) {
-      var err = ono(`Expected a file path, URL, or object. Got ${args.path || args.schema}`);
+      const err = ono(`Expected a file path, URL, or object. Got ${args.path || args.schema}`);
       return maybe(args.callback, Promise.reject(err));
     }
 
@@ -98,8 +98,8 @@ export class $RefParser<S extends object = JSONSchema, O extends ParserOptions<S
     } else if (!args.path && args.schema && "$id" in args.schema && args.schema.$id) {
       // when schema id has defined an URL should use that hostname to request the references,
       // instead of using the current page URL
-      var params = url.parse(args.schema.$id as string);
-      var port = params.protocol === "https:" ? 443 : 80;
+      const params = url.parse(args.schema.$id as string);
+      const port = params.protocol === "https:" ? 443 : 80;
 
       args.path = `${params.protocol}//${params.hostname}:${port}`;
     }
@@ -110,7 +110,7 @@ export class $RefParser<S extends object = JSONSchema, O extends ParserOptions<S
     if (args.schema && typeof args.schema === "object") {
       // A schema object was passed-in.
       // So immediately add a new $Ref with the schema object as its value
-      var $ref = this.$refs._add(args.path);
+      const $ref = this.$refs._add(args.path);
       $ref.value = args.schema;
       $ref.pathType = pathType;
       promise = Promise.resolve(args.schema);
@@ -120,7 +120,7 @@ export class $RefParser<S extends object = JSONSchema, O extends ParserOptions<S
     }
 
     try {
-      var result = await promise;
+      const result = await promise;
 
       if (result !== null && typeof result === "object" && !Buffer.isBuffer(result)) {
         this.schema = result;
@@ -172,7 +172,7 @@ export class $RefParser<S extends object = JSONSchema, O extends ParserOptions<S
   public static parse<S extends object = JSONSchema, O extends ParserOptions<S> = ParserOptions<S>>():
     | Promise<S>
     | Promise<void> {
-    var parser = new $RefParser<S, O>();
+    const parser = new $RefParser<S, O>();
     return parser.parse.apply(parser, arguments as any);
   }
 
@@ -199,7 +199,7 @@ export class $RefParser<S extends object = JSONSchema, O extends ParserOptions<S
     callback: $RefsCallback<S, O>,
   ): Promise<void>;
   async resolve() {
-    var args = normalizeArgs<S, O>(arguments);
+    const args = normalizeArgs<S, O>(arguments);
 
     try {
       await this.parse(args.path, args.schema, args.options);
@@ -252,7 +252,7 @@ export class $RefParser<S extends object = JSONSchema, O extends ParserOptions<S
   static resolve<S extends object = JSONSchema, O extends ParserOptions<S> = ParserOptions<S>>():
     | Promise<S>
     | Promise<void> {
-    var instance = new $RefParser<S, O>();
+    const instance = new $RefParser<S, O>();
     return instance.resolve.apply(instance, arguments as any);
   }
 
@@ -295,7 +295,7 @@ export class $RefParser<S extends object = JSONSchema, O extends ParserOptions<S
   static bundle<S extends object = JSONSchema, O extends ParserOptions<S> = ParserOptions<S>>():
     | Promise<S>
     | Promise<void> {
-    var instance = new $RefParser<S, O>();
+    const instance = new $RefParser<S, O>();
     return instance.bundle.apply(instance, arguments as any);
   }
 
@@ -317,7 +317,7 @@ export class $RefParser<S extends object = JSONSchema, O extends ParserOptions<S
   public bundle(path: string, schema: S | string | unknown, options: O): Promise<S>;
   public bundle(path: string, schema: S | string | unknown, options: O, callback: SchemaCallback<S>): Promise<void>;
   async bundle() {
-    var args = normalizeArgs<S, O>(arguments);
+    const args = normalizeArgs<S, O>(arguments);
     try {
       await this.resolve(args.path, args.schema, args.options);
       _bundle<S, O>(this, args.options);
@@ -367,7 +367,7 @@ export class $RefParser<S extends object = JSONSchema, O extends ParserOptions<S
   static dereference<S extends object = JSONSchema, O extends ParserOptions<S> = ParserOptions<S>>():
     | Promise<S>
     | Promise<void> {
-    var instance = new $RefParser<S, O>();
+    const instance = new $RefParser<S, O>();
     return instance.dereference.apply(instance, arguments as any);
   }
 
@@ -395,7 +395,7 @@ export class $RefParser<S extends object = JSONSchema, O extends ParserOptions<S
   public dereference(schema: S | string | unknown, options: O): Promise<S>;
   public dereference(schema: S | string | unknown): Promise<S>;
   async dereference() {
-    var args = normalizeArgs<S, O>(arguments);
+    const args = normalizeArgs<S, O>(arguments);
 
     try {
       await this.resolve(args.path, args.schema, args.options);
@@ -412,16 +412,16 @@ export default $RefParser;
 function finalize<S extends object = JSONSchema, O extends ParserOptions<S> = ParserOptions<S>>(
   parser: $RefParser<S, O>,
 ) {
-  var errors = JSONParserErrorGroup.getParserErrors(parser);
+  const errors = JSONParserErrorGroup.getParserErrors(parser);
   if (errors.length > 0) {
     throw new JSONParserErrorGroup(parser);
   }
 }
 
-export var parse = $RefParser.parse;
-export var resolve = $RefParser.resolve;
-export var bundle = $RefParser.bundle;
-export var dereference = $RefParser.dereference;
+export const parse = $RefParser.parse;
+export const resolve = $RefParser.resolve;
+export const bundle = $RefParser.bundle;
+export const dereference = $RefParser.dereference;
 
 export {
   UnmatchedResolverError,

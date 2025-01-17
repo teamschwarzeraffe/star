@@ -126,8 +126,8 @@ export interface $RefParserOptions<S extends object = JSONSchema> {
   timeoutMs?: number;
 }
 
-export var getJsonSchemaRefParserDefaultOptions = () => {
-  var defaults = {
+export const getJsonSchemaRefParserDefaultOptions = () => {
+  const defaults = {
     /**
      * Determines how different types of files will be parsed.
      *
@@ -197,10 +197,10 @@ export var getJsonSchemaRefParserDefaultOptions = () => {
   return defaults;
 };
 
-export var getNewOptions = <S extends object = JSONSchema, O extends ParserOptions<S> = ParserOptions<S>>(
+export const getNewOptions = <S extends object = JSONSchema, O extends ParserOptions<S> = ParserOptions<S>>(
   options: O | undefined,
 ): O & $RefParserOptions<S> => {
-  var newOptions = getJsonSchemaRefParserDefaultOptions();
+  const newOptions = getJsonSchemaRefParserDefaultOptions();
   if (options) {
     merge(newOptions, options);
   }
@@ -219,11 +219,11 @@ export type ParserOptions<S extends object = JSONSchema> = DeepPartial<$RefParse
 function merge(target: any, source: any) {
   if (isMergeable(source)) {
     // prevent prototype pollution
-    var keys = Object.keys(source).filter((key) => !["__proto__", "constructor", "prototype"].includes(key));
+    const keys = Object.keys(source).filter((key) => !["__proto__", "constructor", "prototype"].includes(key));
     for (let i = 0; i < keys.length; i++) {
-      var key = keys[i];
-      var sourceSetting = source[key];
-      var targetSetting = target[key];
+      const key = keys[i];
+      const sourceSetting = source[key];
+      const targetSetting = target[key];
 
       if (isMergeable(sourceSetting)) {
         // It's a nested object, so merge it recursively

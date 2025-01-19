@@ -29,7 +29,7 @@ function resolveExternal<S extends object = JSONSchema, O extends ParserOptions<
 
   try {
     // console.log('Resolving $ref pointers in %s', parser.$refs._root$Ref.path);
-    const promises = crawl(parser.schema, parser.$refs._root$Ref.path + "#", parser.$refs, options);
+    var promises = crawl(parser.schema, parser.$refs._root$Ref.path + "#", parser.$refs, options);
     return Promise.all(promises);
   } catch (e) {
     return Promise.reject(e);
@@ -69,10 +69,10 @@ function crawl<S extends object = JSONSchema, O extends ParserOptions<S> = Parse
       promises.push(resolve$Ref<S, O>(obj, path, $refs, options));
     }
 
-    const keys = Object.keys(obj) as string[];
-    for (const key of keys) {
-      const keyPath = Pointer.join(path, key);
-      const value = obj[key as keyof typeof obj] as string | JSONSchema | Buffer | undefined;
+    var keys = Object.keys(obj) as string[];
+    for (var key of keys) {
+      var keyPath = Pointer.join(path, key);
+      var value = obj[key as keyof typeof obj] as string | JSONSchema | Buffer | undefined;
       promises = promises.concat(crawl(value, keyPath, $refs, options, seen, external));
     }
   }
@@ -98,14 +98,14 @@ async function resolve$Ref<S extends object = JSONSchema, O extends ParserOption
   $refs: $Refs<S, O>,
   options: O,
 ) {
-  const shouldResolveOnCwd = options.dereference?.externalReferenceResolution === "root";
-  const resolvedPath = url.resolve(shouldResolveOnCwd ? url.cwd() : path, ($ref as JSONSchema).$ref!);
-  const withoutHash = url.stripHash(resolvedPath);
+  var shouldResolveOnCwd = options.dereference?.externalReferenceResolution === "root";
+  var resolvedPath = url.resolve(shouldResolveOnCwd ? url.cwd() : path, ($ref as JSONSchema).$ref!);
+  var withoutHash = url.stripHash(resolvedPath);
 
   // $ref.$ref = url.relative($refs._root$Ref.path, resolvedPath);
 
   // Do we already have this $ref?
-  const ref = $refs._$refs[withoutHash];
+  var ref = $refs._$refs[withoutHash];
   if (ref) {
     // We've already parsed this $ref, so use the existing value
     return Promise.resolve(ref.value);
@@ -113,11 +113,11 @@ async function resolve$Ref<S extends object = JSONSchema, O extends ParserOption
 
   // Parse the $referenced file/url
   try {
-    const result = await parse(resolvedPath, $refs, options);
+    var result = await parse(resolvedPath, $refs, options);
 
     // Crawl the parsed value
     // console.log('Resolving $ref pointers in %s', withoutHash);
-    const promises = crawl(result, withoutHash + "#", $refs, options, new Set(), true);
+    var promises = crawl(result, withoutHash + "#", $refs, options, new Set(), true);
 
     return Promise.all(promises);
   } catch (err) {

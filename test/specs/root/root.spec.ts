@@ -10,8 +10,8 @@ import { expect } from "vitest";
 
 describe("Schema with a top-level (root) $ref", () => {
   it("should parse successfully", async () => {
-    const parser = new $RefParser();
-    const schema = await parser.parse(path.rel("test/specs/root/root.yaml"));
+    let parser = new $RefParser();
+    let schema = await parser.parse(path.rel("test/specs/root/root.yaml"));
     expect(schema).to.equal(parser.schema);
     expect(schema).to.deep.equal(parsedSchema.schema);
     expect(parser.$refs.paths()).to.deep.equal([path.abs("test/specs/root/root.yaml")]);
@@ -33,8 +33,8 @@ describe("Schema with a top-level (root) $ref", () => {
   );
 
   it("should dereference successfully", async () => {
-    const parser = new $RefParser();
-    const schema = await parser.dereference(path.rel("test/specs/root/root.yaml"));
+    let parser = new $RefParser();
+    let schema = await parser.dereference(path.rel("test/specs/root/root.yaml"));
     expect(schema).to.equal(parser.schema);
     expect(schema).to.deep.equal(dereferencedSchema);
     // Reference equality
@@ -44,8 +44,8 @@ describe("Schema with a top-level (root) $ref", () => {
   });
 
   it("should bundle successfully", async () => {
-    const parser = new $RefParser();
-    const schema = await parser.bundle(path.rel("test/specs/root/root.yaml"));
+    let parser = new $RefParser();
+    let schema = await parser.bundle(path.rel("test/specs/root/root.yaml"));
     expect(schema).to.equal(parser.schema);
     expect(schema).to.deep.equal(bundledSchema);
   });

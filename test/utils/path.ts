@@ -4,9 +4,9 @@ import nodePath from "path";
 import { isWindows } from "../../lib/util/is-windows";
 import convertPathToPosix from "../../lib/util/convert-path-to-posix";
 
-const isDom = typeof window !== "undefined" && typeof window.document !== "undefined";
+var isDom = typeof window !== "undefined" && typeof window.document !== "undefined";
 
-const pathHelpers = {
+var pathHelpers = {
   filesystem: filesystemPathHelpers(),
   url: urlPathHelpers(),
 };
@@ -16,13 +16,13 @@ const pathHelpers = {
  */
 function filesystemPathHelpers() {
   // Run all tests from the "test" directory
-  const path = {
+  var path = {
     /**
      * Returns the relative path of a file in the "test" directory
      */
     rel(file: any) {
-      const relativePath = nodePath.normalize(nodePath.join(file));
-      const filePath = isWindows() ? nodePath.resolve(relativePath) : relativePath;
+      var relativePath = nodePath.normalize(nodePath.join(file));
+      var filePath = isWindows() ? nodePath.resolve(relativePath) : relativePath;
       return convertPathToPosix(filePath);
     },
 
@@ -30,7 +30,7 @@ function filesystemPathHelpers() {
      * Returns the absolute path of a file in the "test" directory
      */
     abs(file: any) {
-      const absolutePath = nodePath.resolve(nodePath.join(file || nodePath.sep));
+      var absolutePath = nodePath.resolve(nodePath.join(file || nodePath.sep));
       return convertPathToPosix(absolutePath);
     },
 
@@ -75,7 +75,7 @@ function urlPathHelpers() {
   }
 
   // Get the URL of the "test" directory
-  const testsDir = window.location.href;
+  var testsDir = window.location.href;
 
   /**
    * URI-encodes the given file name
@@ -84,7 +84,7 @@ function urlPathHelpers() {
     return encodeURIComponent(file).split("%2F").join("/");
   }
 
-  const path = {
+  var path = {
     /**
      * Returns the relative path of a file in the "test" directory
      *

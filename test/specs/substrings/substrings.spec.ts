@@ -10,8 +10,8 @@ import { expect } from "vitest";
 
 describe("$refs that are substrings of each other", () => {
   it("should parse successfully", async () => {
-    let parser = new $RefParser();
-    let schema = await parser.parse(path.rel("test/specs/substrings/substrings.yaml"));
+    const parser = new $RefParser();
+    const schema = await parser.parse(path.rel("test/specs/substrings/substrings.yaml"));
     expect(schema).to.equal(parser.schema);
     expect(schema).to.deep.equal(parsedSchema.schema);
     expect(parser.$refs.paths()).to.deep.equal([path.abs("test/specs/substrings/substrings.yaml")]);
@@ -31,13 +31,13 @@ describe("$refs that are substrings of each other", () => {
   );
 
   it("should dereference successfully", async () => {
-    let parser = new $RefParser();
-    let schema = await parser.dereference(path.rel("test/specs/substrings/substrings.yaml"));
+    const parser = new $RefParser();
+    const schema = await parser.dereference(path.rel("test/specs/substrings/substrings.yaml"));
     expect(schema).to.equal(parser.schema);
     expect(schema).to.deep.equal(dereferencedSchema);
     // Reference equality
-    let properties = schema.properties!;
-    let definitions = schema.definitions!;
+    const properties = schema.properties!;
+    const definitions = schema.definitions!;
     expect(properties.firstName).to.equal(definitions.name);
     expect(properties.middleName).to.equal(definitions["name-with-min-length"]);
     expect(properties.lastName).to.equal(definitions["name-with-min-length-max-length"]);
@@ -46,8 +46,8 @@ describe("$refs that are substrings of each other", () => {
   });
 
   it("should bundle successfully", async () => {
-    let parser = new $RefParser();
-    let schema = await parser.bundle(path.rel("test/specs/substrings/substrings.yaml"));
+    const parser = new $RefParser();
+    const schema = await parser.bundle(path.rel("test/specs/substrings/substrings.yaml"));
     expect(schema).to.equal(parser.schema);
     expect(schema).to.deep.equal(bundledSchema);
   });

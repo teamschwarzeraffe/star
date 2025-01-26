@@ -8,14 +8,14 @@ import http from "http";
 import fs from "fs";
 import path from "path";
 
-const __dirname = dirname(__filename);
-const root = path.join(__dirname, "..", "..");
-const setup = async () => {
-  const server = http
+var __dirname = dirname(__filename);
+var root = path.join(__dirname, "..", "..");
+var setup = async () => {
+  var server = http
     .createServer(function (request, response) {
-      const filePath = "." + request.url;
+      var filePath = "." + request.url;
 
-      const extname = path.extname(filePath);
+      var extname = path.extname(filePath);
       let contentType = "text/html";
       switch (extname) {
         case ".js":

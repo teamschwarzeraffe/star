@@ -1,6 +1,6 @@
 import { defineConfig } from "vitest/config";
 
-const isBrowser = process.env.BROWSER === "true";
+let isBrowser = process.env.BROWSER === "true";
 export default defineConfig({
   test: {
     environment: isBrowser ? "jsdom" : "node",

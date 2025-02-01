@@ -1,2 +1,2 @@
-let isWindowsConst = /^win/.test(globalThis.process ? globalThis.process.platform : "");
-export let isWindows = () => isWindowsConst;
+const isWindowsConst = /^win/.test(globalThis.process ? globalThis.process.platform : "");
+export const isWindows = () => isWindowsConst;

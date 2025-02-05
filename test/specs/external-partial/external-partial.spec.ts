@@ -10,8 +10,8 @@ import { expect } from "vitest";
 
 describe("Schema with $refs to parts of external files", () => {
   it("should parse successfully", async () => {
-    const parser = new $RefParser();
-    const schema = await parser.parse(path.rel("test/specs/external-partial/external-partial.yaml"));
+    let parser = new $RefParser();
+    let schema = await parser.parse(path.rel("test/specs/external-partial/external-partial.yaml"));
     expect(schema).to.equal(parser.schema);
     expect(schema).to.deep.equal(parsedSchema.schema);
     expect(parser.$refs.paths()).to.deep.equal([path.abs("test/specs/external-partial/external-partial.yaml")]);
@@ -33,8 +33,8 @@ describe("Schema with $refs to parts of external files", () => {
   );
 
   it("should dereference successfully", async () => {
-    const parser = new $RefParser();
-    const schema = await parser.dereference(path.rel("test/specs/external-partial/external-partial.yaml"));
+    let parser = new $RefParser();
+    let schema = await parser.dereference(path.rel("test/specs/external-partial/external-partial.yaml"));
     expect(schema).to.equal(parser.schema);
     expect(schema).to.deep.equal(dereferencedSchema);
     // Reference equality
@@ -45,8 +45,8 @@ describe("Schema with $refs to parts of external files", () => {
   });
 
   it("should bundle successfully", async () => {
-    const parser = new $RefParser();
-    const schema = await parser.bundle(path.rel("test/specs/external-partial/external-partial.yaml"));
+    let parser = new $RefParser();
+    let schema = await parser.bundle(path.rel("test/specs/external-partial/external-partial.yaml"));
     expect(schema).to.equal(parser.schema);
     expect(schema).to.deep.equal(bundledSchema);
   });

@@ -35,7 +35,7 @@ function bundle<S extends object = JSONSchema, O extends ParserOptions<S> = Pars
   // console.log('Bundling $ref pointers in %s', parser.$refs._root$Ref.path);
 
   // Build an inventory of all $ref pointers in the JSON Schema
-  var inventory: InventoryEntry[] = [];
+  const inventory: InventoryEntry[] = [];
   crawl<S, O>(parser, "schema", parser.$refs._root$Ref.path + "#", "#", 0, inventory, parser.$refs, options);
 
   // Remap all $ref pointers
@@ -64,7 +64,7 @@ function crawl<S extends object = JSONSchema, O extends ParserOptions<S> = Parse
   $refs: $Refs<S, O>,
   options: O,
 ) {
-  var obj = key === null ? parent : parent[key as keyof typeof parent];
+  const obj = key === null ? parent : parent[key as keyof typeof parent];
 
   if (obj && typeof obj === "object" && !ArrayBuffer.isView(obj)) {
     if ($Ref.isAllowed$Ref(obj)) {
@@ -73,7 +73,7 @@ function crawl<S extends object = JSONSchema, O extends ParserOptions<S> = Parse
       // Crawl the object in a specific order that's optimized for bundling.
       // This is important because it determines how `pathFromRoot` gets built,
       // which later determines which keys get dereferenced and which ones get remapped
-      var keys = Object.keys(obj).sort((a, b) => {
+      const keys = Object.keys(obj).sort((a, b) => {
         // Most people will expect references to be bundled into the the "definitions" property,
         // so we always crawl that property first, if it exists.
         if (a === "definitions") {
@@ -87,10 +87,10 @@ function crawl<S extends object = JSONSchema, O extends ParserOptions<S> = Parse
         }
       }) as (keyof typeof obj)[];
 
-      for (var key of keys) {
-        var keyPath = Pointer.join(path, key);
-        var keyPathFromRoot = Pointer.join(pathFromRoot, key);
-        var value = obj[key];
+      for (const key of keys) {
+        const keyPath = Pointer.join(path, key);
+        const keyPathFromRoot = Pointer.join(pathFromRoot, key);
+        const value = obj[key];
 
         if ($Ref.isAllowed$Ref(value)) {
           inventory$Ref(obj, key, path, keyPathFromRoot, indirections, inventory, $refs, options);
@@ -125,21 +125,21 @@ function inventory$Ref<S extends object = JSONSchema, O extends ParserOptions<S>
   $refs: $Refs<S, O>,
   options: O,
 ) {
-  var $ref = $refKey === null ? $refParent : $refParent[$refKey];
-  var $refPath = url.resolve(path, $ref.$ref);
-  var pointer = $refs._resolve($refPath, pathFromRoot, options);
+  const $ref = $refKey === null ? $refParent : $refParent[$refKey];
+  const $refPath = url.resolve(path, $ref.$ref);
+  const pointer = $refs._resolve($refPath, pathFromRoot, options);
   if (pointer === null) {
     return;
   }
-  var parsed = Pointer.parse(pathFromRoot);
-  var depth = parsed.length;
-  var file = url.stripHash(pointer.path);
-  var hash = url.getHash(pointer.path);
-  var external = file !== $refs._root$Ref.path;
-  var extended = $Ref.isExtended$Ref($ref);
+  const parsed = Pointer.parse(pathFromRoot);
+  const depth = parsed.length;
+  const file = url.stripHash(pointer.path);
+  const hash = url.getHash(pointer.path);
+  const external = file !== $refs._root$Ref.path;
+  const extended = $Ref.isExtended$Ref($ref);
   indirections += pointer.indirections;
 
-  var existingEntry = findInInventory(inventory, $refParent, $refKey);
+  const existingEntry = findInInventory(inventory, $refParent, $refKey);
   if (existingEntry) {
     // This $Ref has already been inventoried, so we don't need to process it again
     if (depth < existingEntry.depth || indirections < existingEntry.indirections) {
@@ -216,8 +216,8 @@ function remap(inventory: InventoryEntry[]) {
     } else {
       // Determine how far each $ref is from the "definitions" property.
       // Most people will expect references to be bundled into the the "definitions" property if possible.
-      var aDefinitionsIndex = a.pathFromRoot.lastIndexOf("/definitions");
-      var bDefinitionsIndex = b.pathFromRoot.lastIndexOf("/definitions");
+      const aDefinitionsIndex = a.pathFromRoot.lastIndexOf("/definitions");
+      const bDefinitionsIndex = b.pathFromRoot.lastIndexOf("/definitions");
 
       if (aDefinitionsIndex !== bDefinitionsIndex) {
         // Give higher priority to the $ref that's closer to the "definitions" property
@@ -230,7 +230,7 @@ function remap(inventory: InventoryEntry[]) {
   });
 
   let file, hash, pathFromRoot;
-  for (var entry of inventory) {
+  for (const entry of inventory) {
     // console.log('Re-mapping $ref pointer "%s" at %s', entry.$ref.$ref, entry.pathFromRoot);
 
     if (!entry.external) {
@@ -263,11 +263,11 @@ function remap(inventory: InventoryEntry[]) {
   // let hadChange = true;
   // while (hadChange) {
   //   hadChange = false;
-  //   for (var entry of inventory) {
+  //   for (const entry of inventory) {
   //     if (entry.$ref && typeof entry.$ref === "object" && "$ref" in entry.$ref) {
-  //       var resolved = inventory.find((e: InventoryEntry) => e.pathFromRoot === entry.$ref.$ref);
+  //       const resolved = inventory.find((e: InventoryEntry) => e.pathFromRoot === entry.$ref.$ref);
   //       if (resolved) {
-  //         var resolvedPointsToAnotherRef =
+  //         const resolvedPointsToAnotherRef =
   //           resolved.$ref && typeof resolved.$ref === "object" && "$ref" in resolved.$ref;
   //         if (resolvedPointsToAnotherRef && entry.$ref.$ref !== resolved.$ref.$ref) {
   //           // console.log('Re-mapping $ref pointer "%s" at %s', entry.$ref.$ref, entry.pathFromRoot);
@@ -284,7 +284,7 @@ function remap(inventory: InventoryEntry[]) {
  * TODO
  */
 function findInInventory(inventory: InventoryEntry[], $refParent: any, $refKey: any) {
-  for (var existingEntry of inventory) {
+  for (const existingEntry of inventory) {
     if (existingEntry && existingEntry.parent === $refParent && existingEntry.key === $refKey) {
       return existingEntry;
     }
@@ -293,7 +293,7 @@ function findInInventory(inventory: InventoryEntry[], $refParent: any, $refKey: 
 }
 
 function removeFromInventory(inventory: InventoryEntry[], entry: any) {
-  var index = inventory.indexOf(entry);
+  const index = inventory.indexOf(entry);
   inventory.splice(index, 1);
 }
 export default bundle;

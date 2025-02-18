@@ -30,7 +30,7 @@ export default {
    * Parses the given file as JSON
    */
   async parse(file: FileInfo): Promise<object | undefined> {
-    const data = file.data;
+    let data = file.data;
     if (Buffer.isBuffer(data)) {
       data = data.toString();
     }

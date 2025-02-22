@@ -32,7 +32,7 @@ describe("Schema with missing pointers", () => {
 
   describe("when continueOnError is true", () => {
     it("should throw a grouped error for missing pointer", async () => {
-      let parser = new $RefParser();
+      const parser = new $RefParser();
       try {
         await parser.dereference({ foo: { $ref: "#/baz" } }, { continueOnError: true });
         helper.shouldNotGetCalled();
@@ -57,7 +57,7 @@ describe("Schema with missing pointers", () => {
     });
 
     it("should throw an error for missing pointer in external file", async () => {
-      let parser = new $RefParser();
+      const parser = new $RefParser();
       try {
         await parser.dereference(
           { foo: { $ref: path.abs("test/specs/missing-pointers/external-from-internal.yaml") } },
@@ -92,7 +92,7 @@ describe("Schema with missing pointers", () => {
     });
 
     it("should throw an missing pointer error with details for target and parent", async () => {
-      let parser = new $RefParser();
+      const parser = new $RefParser();
       try {
         await parser.dereference(
           { foo: { $ref: path.abs("test/specs/missing-pointers/error-details.yaml") } },

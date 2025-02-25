@@ -24,7 +24,7 @@ export default {
    * Reads the given file and returns its raw contents as a Buffer.
    */
   async read(file: FileInfo): Promise<Buffer> {
-    const path: string | undefined;
+    let path: string | undefined;
     try {
       path = url.toFileSystemPath(file.url);
     } catch (err: any) {

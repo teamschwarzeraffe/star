@@ -4,8 +4,8 @@ import $RefParser from "../../lib/index.js";
 
 import { expect } from "vitest";
 
-let isWindows = /^win/.test(globalThis.process ? globalThis.process.platform : "");
-let isBrowser = typeof window !== "undefined";
+const isWindows = /^win/.test(globalThis.process ? globalThis.process.platform : "");
+const isBrowser = typeof window !== "undefined";
 describe("HTTP options", () => {
   describe.skip("http.headers", () => {
     it("should override default HTTP headers", async () => {
@@ -13,9 +13,9 @@ describe("HTTP options", () => {
         return;
       }
 
-      let parser = new $RefParser();
+      const parser = new $RefParser();
 
-      let schema = await parser.parse("https://httpbin.org/headers", {
+      const schema = await parser.parse("https://httpbin.org/headers", {
         resolve: {
           http: {
             headers: {
@@ -35,9 +35,9 @@ describe("HTTP options", () => {
         return;
       }
 
-      let parser = new $RefParser();
+      const parser = new $RefParser();
 
-      let schema = await parser.parse("https://httpbin.org/headers", {
+      const schema = await parser.parse("https://httpbin.org/headers", {
         resolve: {
           http: {
             headers: {
@@ -62,17 +62,17 @@ describe("HTTP options", () => {
     });
 
     it("should follow 5 redirects by default", async () => {
-      let parser = new $RefParser();
+      const parser = new $RefParser();
 
-      let schema = await parser.parse("https://httpbin.org/redirect/5");
+      const schema = await parser.parse("https://httpbin.org/redirect/5");
       // @ts-expect-error TS(2339): Property 'url' does not exist on type 'JSONSchema'... Remove this comment to see the full error message
       expect(schema.url).to.equal("https://httpbin.org/get");
     });
 
     it("should not follow 6 redirects by default", async () => {
       try {
-        let parser = new $RefParser();
-        let schema = await parser.parse("https://httpbin.org/redirect/6");
+        const parser = new $RefParser();
+        const schema = await parser.parse("https://httpbin.org/redirect/6");
 
         if (typeof window === "undefined") {
           throw new Error("All 6 redirects were followed. That should NOT have happened!");
@@ -103,9 +103,9 @@ describe("HTTP options", () => {
     });
 
     it("should follow 10 redirects if http.redirects = 10", async () => {
-      let parser = new $RefParser();
+      const parser = new $RefParser();
 
-      let schema = await parser.parse("https://httpbin.org/redirect/10", {
+      const schema = await parser.parse("https://httpbin.org/redirect/10", {
         resolve: { http: { redirects: 10 } },
       });
 
@@ -115,9 +115,9 @@ describe("HTTP options", () => {
 
     it("should not follow any redirects if http.redirects = 0", async () => {
       try {
-        let parser = new $RefParser();
+        const parser = new $RefParser();
 
-        let schema = await parser.parse("https://httpbin.org/redirect/1", {
+        const schema = await parser.parse("https://httpbin.org/redirect/1", {
           resolve: { http: { redirects: 0 } },
         });
 
@@ -148,23 +148,23 @@ describe("HTTP options", () => {
   if (!isWindows) {
     describe("http.withCredentials", () => {
       it('should work by default with CORS "Access-Control-Allow-Origin: *"', async () => {
-        let parser = new $RefParser();
+        const parser = new $RefParser();
 
         // Swagger.io has CORS enabled, with "Access-Control-Allow-Origin" set to a wildcard ("*").
         // This should work by-default.
-        let schema = await parser.parse("https://petstore.swagger.io/v2/swagger.json");
+        const schema = await parser.parse("https://petstore.swagger.io/v2/swagger.json");
 
         expect(schema).to.be.an("object");
         expect(parser.schema).to.equal(schema);
       });
 
       it("should download successfully with http.withCredentials = false (default)", async () => {
-        let parser = new $RefParser();
+        const parser = new $RefParser();
 
         // Swagger.io has CORS enabled, with "Access-Control-Allow-Origin" set to a wildcard ("*").
         // So, withCredentials MUST be false (this is the default, but we're testing it explicitly here)
 
-        let schema = await parser.parse("https://petstore.swagger.io/v2/swagger.json", {
+        const schema = await parser.parse("https://petstore.swagger.io/v2/swagger.json", {
           resolve: { http: { withCredentials: false } },
         });
 
@@ -175,12 +175,12 @@ describe("HTTP options", () => {
       if (isBrowser) {
         it("should throw error in browser if http.withCredentials = true", async () => {
           try {
-            let parser = new $RefParser();
+            const parser = new $RefParser();
 
             // Swagger.io has CORS enabled, with "Access-Control-Allow-Origin" set to a wildcard ("*").
             // So, withCredentials MUST be false (this is the default, but we're testing it explicitly here)
 
-            let schema = await parser.parse("https://petstore.swagger.io/v2/swagger.json", {
+            const schema = await parser.parse("https://petstore.swagger.io/v2/swagger.json", {
               resolve: { http: { withCredentials: true } },
             });
 

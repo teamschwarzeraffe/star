@@ -11,8 +11,8 @@ import { expect } from "vitest";
 describe("Schema with circular $refs that extend each other", () => {
   describe("$ref to self", () => {
     it("should parse successfully", async () => {
-      let parser = new $RefParser();
-      let schema = await parser.parse(path.rel("test/specs/circular-extended/circular-extended-self.yaml"));
+      const parser = new $RefParser();
+      const schema = await parser.parse(path.rel("test/specs/circular-extended/circular-extended-self.yaml"));
       expect(schema).to.equal(parser.schema);
       expect(schema).to.deep.equal(parsedSchema.self);
       expect(parser.$refs.paths()).to.deep.equal([
@@ -35,8 +35,8 @@ describe("Schema with circular $refs that extend each other", () => {
     );
 
     it("should dereference successfully", async () => {
-      let parser = new $RefParser();
-      let schema = await parser.dereference(path.rel("test/specs/circular-extended/circular-extended-self.yaml"));
+      const parser = new $RefParser();
+      const schema = await parser.dereference(path.rel("test/specs/circular-extended/circular-extended-self.yaml"));
       expect(schema).to.equal(parser.schema);
       expect(schema).to.deep.equal(dereferencedSchema.self);
       // The "circular" flag should be set
@@ -44,9 +44,9 @@ describe("Schema with circular $refs that extend each other", () => {
     });
 
     it('should not dereference circular $refs if "options.dereference.circular" is "ignore"', async () => {
-      let parser = new $RefParser();
+      const parser = new $RefParser();
 
-      let schema = await parser.dereference(path.rel("test/specs/circular-extended/circular-extended-self.yaml"), {
+      const schema = await parser.dereference(path.rel("test/specs/circular-extended/circular-extended-self.yaml"), {
         dereference: { circular: "ignore" },
       });
       expect(schema).to.equal(parser.schema);
@@ -56,7 +56,7 @@ describe("Schema with circular $refs that extend each other", () => {
     });
 
     it('should throw an error if "options.dereference.circular" is false', async () => {
-      let parser = new $RefParser();
+      const parser = new $RefParser();
 
       try {
         await parser.dereference(path.rel("test/specs/circular-extended/circular-extended-self.yaml"), {
@@ -77,8 +77,8 @@ describe("Schema with circular $refs that extend each other", () => {
     });
 
     it("should bundle successfully", async () => {
-      let parser = new $RefParser();
-      let schema = await parser.bundle(path.rel("test/specs/circular-extended/circular-extended-self.yaml"));
+      const parser = new $RefParser();
+      const schema = await parser.bundle(path.rel("test/specs/circular-extended/circular-extended-self.yaml"));
       expect(schema).to.equal(parser.schema);
       expect(schema).to.deep.equal(bundledSchema.self);
       // The "circular" flag should NOT be set
@@ -89,8 +89,8 @@ describe("Schema with circular $refs that extend each other", () => {
 
   describe("$ref to ancestor", () => {
     it("should parse successfully", async () => {
-      let parser = new $RefParser();
-      let schema = await parser.parse(path.rel("test/specs/circular-extended/circular-extended-ancestor.yaml"));
+      const parser = new $RefParser();
+      const schema = await parser.parse(path.rel("test/specs/circular-extended/circular-extended-ancestor.yaml"));
       expect(schema).to.equal(parser.schema);
       expect(schema).to.deep.equal(parsedSchema.ancestor);
       expect(parser.$refs.paths()).to.deep.equal([
@@ -117,8 +117,8 @@ describe("Schema with circular $refs that extend each other", () => {
     );
 
     it("should dereference successfully", async () => {
-      let parser = new $RefParser();
-      let schema = await parser.dereference(path.rel("test/specs/circular-extended/circular-extended-ancestor.yaml"));
+      const parser = new $RefParser();
+      const schema = await parser.dereference(path.rel("test/specs/circular-extended/circular-extended-ancestor.yaml"));
       expect(schema).to.equal(parser.schema);
       expect(schema).to.deep.equal(dereferencedSchema.ancestor.fullyDereferenced);
       // The "circular" flag should be set
@@ -131,9 +131,9 @@ describe("Schema with circular $refs that extend each other", () => {
     });
 
     it('should not dereference circular $refs if "options.dereference.circular" is "ignore"', async () => {
-      let parser = new $RefParser();
+      const parser = new $RefParser();
 
-      let schema = await parser.dereference(
+      const schema = await parser.dereference(
         path.rel("test/specs/circular-extended/circular-extended-ancestor.yaml"),
         {
           dereference: { circular: "ignore" },
@@ -146,7 +146,7 @@ describe("Schema with circular $refs that extend each other", () => {
     });
 
     it('should throw an error if "options.dereference.circular" is false', async () => {
-      let parser = new $RefParser();
+      const parser = new $RefParser();
 
       try {
         await parser.dereference(path.rel("test/specs/circular-extended/circular-extended-ancestor.yaml"), {
@@ -169,8 +169,8 @@ describe("Schema with circular $refs that extend each other", () => {
     });
 
     it("should bundle successfully", async () => {
-      let parser = new $RefParser();
-      let schema = await parser.bundle(path.rel("test/specs/circular-extended/circular-extended-ancestor.yaml"));
+      const parser = new $RefParser();
+      const schema = await parser.bundle(path.rel("test/specs/circular-extended/circular-extended-ancestor.yaml"));
       expect(schema).to.equal(parser.schema);
       expect(schema).to.deep.equal(bundledSchema.ancestor);
       // The "circular" flag should NOT be set
@@ -181,8 +181,8 @@ describe("Schema with circular $refs that extend each other", () => {
 
   describe("indirect circular $refs", () => {
     it("should parse successfully", async () => {
-      let parser = new $RefParser();
-      let schema = await parser.parse(path.rel("test/specs/circular-extended/circular-extended-indirect.yaml"));
+      const parser = new $RefParser();
+      const schema = await parser.parse(path.rel("test/specs/circular-extended/circular-extended-indirect.yaml"));
       expect(schema).to.equal(parser.schema);
       expect(schema).to.deep.equal(parsedSchema.indirect);
       expect(parser.$refs.paths()).to.deep.equal([
@@ -211,8 +211,8 @@ describe("Schema with circular $refs that extend each other", () => {
     );
 
     it("should dereference successfully", async () => {
-      let parser = new $RefParser();
-      let schema = await parser.dereference(path.rel("test/specs/circular-extended/circular-extended-indirect.yaml"));
+      const parser = new $RefParser();
+      const schema = await parser.dereference(path.rel("test/specs/circular-extended/circular-extended-indirect.yaml"));
       expect(schema).to.equal(parser.schema);
       expect(schema).to.deep.equal(dereferencedSchema.indirect.fullyDereferenced);
       // The "circular" flag should be set
@@ -233,9 +233,9 @@ describe("Schema with circular $refs that extend each other", () => {
     });
 
     it('should not dereference circular $refs if "options.dereference.circular" is "ignore"', async () => {
-      let parser = new $RefParser();
+      const parser = new $RefParser();
 
-      let schema = await parser.dereference(
+      const schema = await parser.dereference(
         path.rel("test/specs/circular-extended/circular-extended-indirect.yaml"),
         {
           dereference: { circular: "ignore" },
@@ -248,7 +248,7 @@ describe("Schema with circular $refs that extend each other", () => {
     });
 
     it('should throw an error if "options.dereference.circular" is false', async () => {
-      let parser = new $RefParser();
+      const parser = new $RefParser();
 
       try {
         await parser.dereference(path.rel("test/specs/circular-extended/circular-extended-indirect.yaml"), {
@@ -271,8 +271,8 @@ describe("Schema with circular $refs that extend each other", () => {
     });
 
     it("should bundle successfully", async () => {
-      let parser = new $RefParser();
-      let schema = await parser.bundle(path.rel("test/specs/circular-extended/circular-extended-indirect.yaml"));
+      const parser = new $RefParser();
+      const schema = await parser.bundle(path.rel("test/specs/circular-extended/circular-extended-indirect.yaml"));
       expect(schema).to.equal(parser.schema);
       expect(schema).to.deep.equal(bundledSchema.indirect);
       // The "circular" flag should NOT be set
@@ -283,8 +283,8 @@ describe("Schema with circular $refs that extend each other", () => {
 
   describe("indirect circular and ancestor $refs", () => {
     it("should parse successfully", async () => {
-      let parser = new $RefParser();
-      let schema = await parser.parse(
+      const parser = new $RefParser();
+      const schema = await parser.parse(
         path.rel("test/specs/circular-extended/circular-extended-indirect-ancestor.yaml"),
       );
       expect(schema).to.equal(parser.schema);
@@ -315,8 +315,8 @@ describe("Schema with circular $refs that extend each other", () => {
     );
 
     it("should dereference successfully", async () => {
-      let parser = new $RefParser();
-      let schema = await parser.dereference(
+      const parser = new $RefParser();
+      const schema = await parser.dereference(
         path.rel("test/specs/circular-extended/circular-extended-indirect-ancestor.yaml"),
       );
       expect(schema).to.equal(parser.schema);
@@ -336,9 +336,9 @@ describe("Schema with circular $refs that extend each other", () => {
     });
 
     it('should not dereference circular $refs if "options.dereference.circular" is "ignore"', async () => {
-      let parser = new $RefParser();
+      const parser = new $RefParser();
 
-      let schema = await parser.dereference(
+      const schema = await parser.dereference(
         path.rel("test/specs/circular-extended/circular-extended-indirect-ancestor.yaml"),
         { dereference: { circular: "ignore" } },
       );
@@ -349,7 +349,7 @@ describe("Schema with circular $refs that extend each other", () => {
     });
 
     it('should throw an error if "options.dereference.circular" is false', async () => {
-      let parser = new $RefParser();
+      const parser = new $RefParser();
 
       try {
         await parser.dereference(path.rel("test/specs/circular-extended/circular-extended-indirect-ancestor.yaml"), {
@@ -370,8 +370,8 @@ describe("Schema with circular $refs that extend each other", () => {
     });
 
     it("should bundle successfully", async () => {
-      let parser = new $RefParser();
-      let schema = await parser.bundle(
+      const parser = new $RefParser();
+      const schema = await parser.bundle(
         path.rel("test/specs/circular-extended/circular-extended-indirect-ancestor.yaml"),
       );
       expect(schema).to.equal(parser.schema);

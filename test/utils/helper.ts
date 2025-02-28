@@ -2,7 +2,7 @@ import $RefParser from "../../lib/index.js";
 
 import { expect } from "vitest";
 
-const helper = {
+var helper = {
   /**
    * Throws an error if called.
    */
@@ -19,9 +19,9 @@ const helper = {
    * @returns {Function}
    */
   testResolve(filePath: string) {
-    const parsedSchema = arguments[2];
-    const expectedFiles: any = [];
-    const messages: any = [];
+    var parsedSchema = arguments[2];
+    var expectedFiles: any = [];
+    var messages: any = [];
     let actualFiles: any;
 
     for (let i = 1; i < arguments.length; i += 2) {
@@ -30,8 +30,8 @@ const helper = {
     }
 
     return async () => {
-      const parser = new $RefParser();
-      const $refs = await parser.resolve(filePath);
+      var parser = new $RefParser();
+      var $refs = await parser.resolve(filePath);
 
       expect(parser.schema).to.deep.equal(parsedSchema);
       expect(parser.$refs).to.equal($refs);
@@ -53,12 +53,12 @@ const helper = {
       }
 
       // Resolved values
-      const values = $refs.values();
+      var values = $refs.values();
       expect(values).to.have.keys(expectedFiles);
-      for (const [i, file] of expectedFiles.entries()) {
+      for (var [i, file] of expectedFiles.entries()) {
         // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
-        const actual = helper.convertNodeBuffersToPOJOs(values[file]);
-        const expected = messages[i];
+        var actual = helper.convertNodeBuffersToPOJOs(values[file]);
+        var expected = messages[i];
         expect(actual).to.deep.equal(expected, file);
       }
     };
@@ -82,7 +82,7 @@ const helper = {
     let clone = value;
     if (value && typeof value === "object") {
       clone = value instanceof Array ? [] : {};
-      const keys = Object.keys(value);
+      var keys = Object.keys(value);
       for (let i = 0; i < keys.length; i++) {
         clone[keys[i]] = helper.cloneDeep(value[keys[i]]);
       }

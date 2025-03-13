@@ -59,9 +59,9 @@ export class JSONParserErrorGroup<
   static getParserErrors<S extends object = JSONSchema, O extends ParserOptions<S> = ParserOptions<S>>(
     parser: $RefParser<S, O>,
   ) {
-    let errors = [];
+    const errors = [];
 
-    for (let $ref of Object.values(parser.$refs._$refs) as $Ref<S, O>[]) {
+    for (const $ref of Object.values(parser.$refs._$refs) as $Ref<S, O>[]) {
       if ($ref.errors) {
         errors.push(...$ref.errors);
       }

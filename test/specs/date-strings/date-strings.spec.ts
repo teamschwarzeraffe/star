@@ -8,8 +8,8 @@ import { expect } from "vitest";
 
 describe("Schema with date strings", () => {
   it("should parse successfully", async () => {
-    const parser = new $RefParser();
-    const schema = await parser.parse(path.rel("test/specs/date-strings/date-strings.yaml"));
+    let parser = new $RefParser();
+    let schema = await parser.parse(path.rel("test/specs/date-strings/date-strings.yaml"));
     expect(schema).to.equal(parser.schema);
     expect(schema).to.deep.equal(parsedSchema.schema);
     expect(parser.$refs.paths()).to.deep.equal([path.abs("test/specs/date-strings/date-strings.yaml")]);

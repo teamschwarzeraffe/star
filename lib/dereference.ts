@@ -21,9 +21,9 @@ function dereference<S extends object = JSONSchema, O extends ParserOptions<S> =
   parser: $RefParser<S, O>,
   options: O,
 ) {
-  var start = Date.now();
+  const start = Date.now();
   // console.log('Dereferencing $ref pointers in %s', parser.$refs._root$Ref.path);
-  var dereferenced = crawl<S, O>(
+  const dereferenced = crawl<S, O>(
     parser.schema,
     parser.$refs._root$Ref.path!,
     "#",
@@ -64,7 +64,7 @@ function crawl<S extends object = JSONSchema, O extends ParserOptions<S> = Parse
   startTime: number,
 ) {
   let dereferenced;
-  var result = {
+  const result = {
     value: obj,
     circular: false,
   };
@@ -74,8 +74,8 @@ function crawl<S extends object = JSONSchema, O extends ParserOptions<S> = Parse
       throw new TimeoutError(options.timeoutMs);
     }
   }
-  var derefOptions = (options.dereference || {}) as DereferenceOptions;
-  var isExcludedPath = derefOptions.excludedPathMatcher || (() => false);
+  const derefOptions = (options.dereference || {}) as DereferenceOptions;
+  const isExcludedPath = derefOptions.excludedPathMatcher || (() => false);
 
   if (derefOptions?.circular === "ignore" || !processedObjects.has(obj)) {
     if (obj && typeof obj === "object" && !ArrayBuffer.isView(obj) && !isExcludedPath(pathFromRoot)) {
@@ -97,15 +97,15 @@ function crawl<S extends object = JSONSchema, O extends ParserOptions<S> = Parse
         result.circular = dereferenced.circular;
         result.value = dereferenced.value;
       } else {
-        for (var key of Object.keys(obj)) {
-          var keyPath = Pointer.join(path, key);
-          var keyPathFromRoot = Pointer.join(pathFromRoot, key);
+        for (const key of Object.keys(obj)) {
+          const keyPath = Pointer.join(path, key);
+          const keyPathFromRoot = Pointer.join(pathFromRoot, key);
 
           if (isExcludedPath(keyPathFromRoot)) {
             continue;
           }
 
-          var value = obj[key];
+          const value = obj[key];
           let circular = false;
 
           if ($Ref.isAllowed$Ref(value, options)) {
@@ -125,7 +125,7 @@ function crawl<S extends object = JSONSchema, O extends ParserOptions<S> = Parse
             if (obj[key] !== dereferenced.value) {
               // If we have properties we want to preserve from our dereferenced schema then we need
               // to copy them over to our new object.
-              var preserved: Map<string, unknown> = new Map();
+              const preserved: Map<string, unknown> = new Map();
               if (derefOptions?.preservedProperties) {
                 if (typeof obj[key] === "object" && !Array.isArray(obj[key])) {
                   derefOptions?.preservedProperties.forEach((prop) => {
@@ -209,16 +209,16 @@ function dereference$Ref<S extends object = JSONSchema, O extends ParserOptions<
   options: O,
   startTime: number,
 ) {
-  var isExternalRef = $Ref.isExternal$Ref($ref);
-  var shouldResolveOnCwd = isExternalRef && options?.dereference?.externalReferenceResolution === "root";
-  var $refPath = url.resolve(shouldResolveOnCwd ? url.cwd() : path, $ref.$ref);
+  const isExternalRef = $Ref.isExternal$Ref($ref);
+  const shouldResolveOnCwd = isExternalRef && options?.dereference?.externalReferenceResolution === "root";
+  const $refPath = url.resolve(shouldResolveOnCwd ? url.cwd() : path, $ref.$ref);
 
-  var cache = dereferencedCache.get($refPath);
+  const cache = dereferencedCache.get($refPath);
   if (cache && !cache.circular) {
-    var refKeys = Object.keys($ref);
+    const refKeys = Object.keys($ref);
     if (refKeys.length > 1) {
-      var extraKeys = {};
-      for (var key of refKeys) {
+      const extraKeys = {};
+      for (const key of refKeys) {
         if (key !== "$ref" && !(key in cache.value)) {
           // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
           extraKeys[key] = $ref[key];
@@ -233,7 +233,7 @@ function dereference$Ref<S extends object = JSONSchema, O extends ParserOptions<
     return cache;
   }
 
-  var pointer = $refs._resolve($refPath, path, options);
+  const pointer = $refs._resolve($refPath, path, options);
 
   if (pointer === null) {
     return {
@@ -243,7 +243,7 @@ function dereference$Ref<S extends object = JSONSchema, O extends ParserOptions<
   }
 
   // Check for circular references
-  var directCircular = pointer.circular;
+  const directCircular = pointer.circular;
   let circular = directCircular || parents.has(pointer.value);
   if (circular) {
     foundCircularReference(path, $refs, options);
@@ -255,7 +255,7 @@ function dereference$Ref<S extends object = JSONSchema, O extends ParserOptions<
   // Crawl the dereferenced value (unless it's circular)
   if (!circular) {
     // Determine if the dereferenced value is circular
-    var dereferenced = crawl(
+    const dereferenced = crawl(
       dereferencedValue,
       pointer.path,
       pathFromRoot,
@@ -281,7 +281,7 @@ function dereference$Ref<S extends object = JSONSchema, O extends ParserOptions<
     dereferencedValue.$ref = pathFromRoot;
   }
 
-  var dereferencedObject = {
+  const dereferencedObject = {
     circular,
     value: dereferencedValue,
   };

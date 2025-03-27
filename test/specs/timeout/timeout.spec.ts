@@ -8,7 +8,7 @@ import { TimeoutError } from "../../../lib/util/errors";
 describe("Timeouts", () => {
   it("should throw error when timeout is reached", async () => {
     try {
-      let parser = new $RefParser();
+      const parser = new $RefParser();
       await parser.dereference(path.rel("test/specs/timeout/timeout.yaml"), {
         timeoutMs: 0.01,
       });

@@ -45,7 +45,7 @@ export default {
           if (this.allowBOM) {
             try {
               // find the first curly brace
-              const firstCurlyBrace = data.indexOf("{");
+              var firstCurlyBrace = data.indexOf("{");
               // remove any characters before the first curly brace
               data = data.slice(firstCurlyBrace);
               return JSON.parse(data);

@@ -5,14 +5,14 @@ import * as url from "./util/url.js";
 import { JSONParserError, InvalidPointerError, MissingPointerError, isHandledError } from "./util/errors.js";
 import type { JSONSchema } from "./types";
 
-export var nullSymbol = Symbol('null');
+export const nullSymbol = Symbol('null');
 
-var slashes = /\//g;
-var tildes = /~/g;
-var escapedSlash = /~1/g;
-var escapedTilde = /~0/g;
+const slashes = /\//g;
+const tildes = /~/g;
+const escapedSlash = /~1/g;
+const escapedTilde = /~0/g;
 
-var safeDecodeURIComponent = (encodedURIComponent: string): string => {
+const safeDecodeURIComponent = (encodedURIComponent: string): string => {
   try {
     return decodeURIComponent(encodedURIComponent);
   } catch {
@@ -89,8 +89,8 @@ class Pointer<S extends object = JSONSchema, O extends ParserOptions<S> = Parser
    * of the resolved value.
    */
   resolve(obj: S, options?: O, pathFromRoot?: string) {
-    var tokens = Pointer.parse(this.path, this.originalPath);
-    var found: any = [];
+    const tokens = Pointer.parse(this.path, this.originalPath);
+    const found: any = [];
 
     // Crawl the object, one token at a time
     this.value = unwrapOrThrow(obj);
@@ -105,13 +105,13 @@ class Pointer<S extends object = JSONSchema, O extends ParserOptions<S> = Parser
         return this;
       }
 
-      var token = tokens[i];
+      const token = tokens[i];
 
       if (this.value[token] === undefined || (this.value[token] === null && i === tokens.length - 1)) {
         // one final case is if the entry itself includes slashes, and was parsed out as a token - we can join the remaining tokens and try again
         let didFindSubstringSlashMatch = false;
         for (let j = tokens.length - 1; j > i; j--) {
-          var joinedToken = tokens.slice(i, j + 1).join("/");
+          const joinedToken = tokens.slice(i, j + 1).join("/");
           if (this.value[joinedToken] !== undefined) {
             this.value = this.value[joinedToken];
             i = j;
@@ -135,11 +135,11 @@ class Pointer<S extends object = JSONSchema, O extends ParserOptions<S> = Parser
 
         this.value = null;
 
-        var path = this.$ref.path || "";
+        const path = this.$ref.path || "";
 
-        var targetRef = this.path.replace(path, "");
-        var targetFound = Pointer.join("", found);
-        var parentPath = pathFromRoot?.replace(path, "");
+        const targetRef = this.path.replace(path, "");
+        const targetFound = Pointer.join("", found);
+        const parentPath = pathFromRoot?.replace(path, "");
 
         throw new MissingPointerError(token, decodeURI(this.originalPath), targetRef, targetFound, parentPath);
       } else {
@@ -168,7 +168,7 @@ class Pointer<S extends object = JSONSchema, O extends ParserOptions<S> = Parser
    * Returns the modified object, or an entirely new object if the entire object is overwritten.
    */
   set(obj: S, value: any, options?: O) {
-    var tokens = Pointer.parse(this.path);
+    const tokens = Pointer.parse(this.path);
     let token;
 
     if (tokens.length === 0) {
@@ -216,7 +216,7 @@ class Pointer<S extends object = JSONSchema, O extends ParserOptions<S> = Parser
    */
   static parse(path: string, originalPath?: string): string[] {
     // Get the JSON pointer from the path's hash
-    var pointer = url.getHash(path).substring(1);
+    const pointer = url.getHash(path).substring(1);
 
     // If there's no pointer, then there are no tokens,
     // so return an empty array
@@ -225,7 +225,7 @@ class Pointer<S extends object = JSONSchema, O extends ParserOptions<S> = Parser
     }
 
     // Split into an array
-    var split = pointer.split("/");
+    const split = pointer.split("/");
 
     // Decode each part, according to RFC 6901
     for (let i = 0; i < split.length; i++) {
@@ -255,7 +255,7 @@ class Pointer<S extends object = JSONSchema, O extends ParserOptions<S> = Parser
     // Append each token to the base path
     tokens = Array.isArray(tokens) ? tokens : [tokens];
     for (let i = 0; i < tokens.length; i++) {
-      var token = tokens[i];
+      const token = tokens[i];
       // Encode the token, according to RFC 6901
       base += "/" + encodeURIComponent(token.replace(tildes, "~0").replace(slashes, "~1"));
     }
@@ -279,13 +279,13 @@ function resolveIf$Ref(pointer: any, options: any, pathFromRoot?: any) {
   // Is the value a JSON reference? (and allowed?)
 
   if ($Ref.isAllowed$Ref(pointer.value, options)) {
-    var $refPath = url.resolve(pointer.path, pointer.value.$ref);
+    const $refPath = url.resolve(pointer.path, pointer.value.$ref);
 
     if ($refPath === pointer.path && !isRootPath(pathFromRoot)) {
       // The value is a reference to itself, so there's nothing to do.
       pointer.circular = true;
     } else {
-      var resolved = pointer.$ref.$refs._resolve($refPath, pointer.path, options);
+      const resolved = pointer.$ref.$refs._resolve($refPath, pointer.path, options);
       if (resolved === null) {
         return false;
       }

@@ -50,7 +50,7 @@ export default {
    * Reads the given URL and returns its raw contents as a Buffer.
    */
   read(file: FileInfo) {
-    const u = url.parse(file.url);
+    var u = url.parse(file.url);
 
     if (typeof window !== "undefined" && !u.protocol) {
       // Use the protocol of the current page
@@ -72,11 +72,11 @@ async function download<S extends object = JSONSchema>(
   _redirects?: string[],
 ): Promise<Buffer> {
   u = url.parse(u);
-  const redirects = _redirects || [];
+  var redirects = _redirects || [];
   redirects.push(u.href);
 
   try {
-    const res = await get(u, httpOptions);
+    var res = await get(u, httpOptions);
     if (res.status >= 400) {
       throw ono({ status: res.status }, `HTTP ERROR ${res.status}`);
     } else if (res.status >= 300) {
@@ -90,12 +90,12 @@ async function download<S extends object = JSONSchema>(
       } else if (!("location" in res.headers) || !res.headers.location) {
         throw ono({ status: res.status }, `HTTP ${res.status} redirect with no location header`);
       } else {
-        const redirectTo = url.resolve(u.href, res.headers.location as string);
+        var redirectTo = url.resolve(u.href, res.headers.location as string);
         return download(redirectTo, httpOptions, redirects);
       }
     } else {
       if (res.body) {
-        const buf = await res.arrayBuffer();
+        var buf = await res.arrayBuffer();
         return Buffer.from(buf);
       }
       return Buffer.alloc(0);
@@ -117,7 +117,7 @@ async function get<S extends object = JSONSchema>(u: RequestInfo | URL, httpOpti
     timeoutId = setTimeout(() => controller.abort(), httpOptions.timeout);
   }
 
-  const response = await fetch(u, {
+  var response = await fetch(u, {
     method: "GET",
     headers: httpOptions.headers || {},
     credentials: httpOptions.withCredentials ? "include" : "same-origin",

@@ -1,7 +1,7 @@
 import path from "path";
 
 export default function convertPathToPosix(filePath: string) {
-  let isExtendedLengthPath = filePath.startsWith("\\\\?\\");
+  const isExtendedLengthPath = filePath.startsWith("\\\\?\\");
 
   if (isExtendedLengthPath) {
     return filePath;

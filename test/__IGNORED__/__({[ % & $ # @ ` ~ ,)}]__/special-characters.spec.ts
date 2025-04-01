@@ -9,8 +9,8 @@ import { expect } from "vitest";
 
 describe("File names with special characters", () => {
   it("should parse successfully", async () => {
-    const parser = new $RefParser();
-    const schema = await parser.parse(
+    let parser = new $RefParser();
+    let schema = await parser.parse(
       path.rel("test/specs/__({[ % & $ # @ ` ~ ,)}]__/__({[ % & $ # @ ` ~ ,)}]__.yaml"),
     );
     expect(schema).to.equal(parser.schema);
@@ -32,8 +32,8 @@ describe("File names with special characters", () => {
   );
 
   it("should dereference successfully", async () => {
-    const parser = new $RefParser();
-    const schema = await parser.dereference(
+    let parser = new $RefParser();
+    let schema = await parser.dereference(
       path.rel("test/specs/__({[ % & $ # @ ` ~ ,)}]__/__({[ % & $ # @ ` ~ ,)}]__.yaml"),
     );
     expect(schema).to.equal(parser.schema);
@@ -43,8 +43,8 @@ describe("File names with special characters", () => {
   });
 
   it("should bundle successfully", async () => {
-    const parser = new $RefParser();
-    const schema = await parser.bundle(
+    let parser = new $RefParser();
+    let schema = await parser.bundle(
       path.rel("test/specs/__({[ % & $ # @ ` ~ ,)}]__/__({[ % & $ # @ ` ~ ,)}]__.yaml"),
     );
     expect(schema).to.equal(parser.schema);

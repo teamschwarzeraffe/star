@@ -33,7 +33,7 @@ export default {
    * @returns
    */
   async parse(file: FileInfo) {
-    const data = file.data;
+    let data = file.data;
     if (Buffer.isBuffer(data)) {
       data = data.toString();
     }

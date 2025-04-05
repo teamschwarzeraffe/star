@@ -21,7 +21,7 @@ async function parse<S extends object = JSONSchema, O extends ParserOptions<S> =
   options: O,
 ) {
   // Remove the URL fragment, if any
-  const hashIndex = path.indexOf("#");
+  var hashIndex = path.indexOf("#");
   let hash = "";
   if (hashIndex >= 0) {
     hash = path.substring(hashIndex);
@@ -31,10 +31,10 @@ async function parse<S extends object = JSONSchema, O extends ParserOptions<S> =
 
   // Add a new $Ref for this file, even though we don't have the value yet.
   // This ensures that we don't simultaneously read & parse the same file multiple times
-  const $ref = $refs._add(path);
+  var $ref = $refs._add(path);
 
   // This "file object" will be passed to all resolvers and parsers.
-  const file = {
+  var file = {
     url: path,
     hash,
     extension: url.getExtension(path),
@@ -42,11 +42,11 @@ async function parse<S extends object = JSONSchema, O extends ParserOptions<S> =
 
   // Read the file and then parse the data
   try {
-    const resolver = await readFile<S, O>(file, options, $refs);
+    var resolver = await readFile<S, O>(file, options, $refs);
     $ref.pathType = resolver.plugin.name;
     file.data = resolver.result;
 
-    const parser = await parseFile<S, O>(file, options, $refs);
+    var parser = await parseFile<S, O>(file, options, $refs);
     $ref.value = parser.result;
 
     return parser.result;
@@ -84,7 +84,7 @@ async function readFile<S extends object = JSONSchema, O extends ParserOptions<S
   // Run the resolvers, in order, until one of them succeeds
   plugins.sort(resolvers);
   try {
-    const data = await plugins.run(resolvers, "read", file, $refs);
+    var data = await plugins.run(resolvers, "read", file, $refs);
     return data;
   } catch (err: any) {
     if (!err && options.continueOnError) {
@@ -124,14 +124,14 @@ async function parseFile<S extends object = JSONSchema, O extends ParserOptions<
   // Find the parsers that can read this file type.
   // If none of the parsers are an exact match for this file, then we'll try ALL of them.
   // This handles situations where the file IS a supported type, just with an unknown extension.
-  const allParsers = plugins.all(options.parse);
-  const filteredParsers = plugins.filter(allParsers, "canParse", file);
-  const parsers = filteredParsers.length > 0 ? filteredParsers : allParsers;
+  var allParsers = plugins.all(options.parse);
+  var filteredParsers = plugins.filter(allParsers, "canParse", file);
+  var parsers = filteredParsers.length > 0 ? filteredParsers : allParsers;
 
   // Run the parsers, in order, until one of them succeeds
   plugins.sort(parsers);
   try {
-    const parser = await plugins.run<S, O>(parsers, "parse", file, $refs);
+    var parser = await plugins.run<S, O>(parsers, "parse", file, $refs);
     if (!parser.plugin.allowEmpty && isEmpty(parser.result)) {
       throw ono.syntax(`Error parsing "${file.url}" as ${parser.plugin.name}. \nParsed value is empty`);
     } else {

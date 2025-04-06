@@ -1,4 +1,4 @@
-let dereferencedSchema = {
+const dereferencedSchema = {
   self: {
     definitions: {
       pet: {

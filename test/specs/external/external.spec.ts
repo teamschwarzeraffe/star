@@ -10,24 +10,24 @@ import { expect } from "vitest";
 
 describe("Schema with external $refs", () => {
   it("should parse successfully from an absolute path", async () => {
-    const parser = new $RefParser();
-    const schema = await parser.parse(path.abs("test/specs/external/external.yaml"));
+    let parser = new $RefParser();
+    let schema = await parser.parse(path.abs("test/specs/external/external.yaml"));
     expect(schema).to.equal(parser.schema);
     expect(schema).to.deep.equal(parsedSchema.schema);
     expect(parser.$refs.paths()).to.deep.equal([path.abs("test/specs/external/external.yaml")]);
   });
 
   it("should parse successfully from a relative path", async () => {
-    const parser = new $RefParser();
-    const schema = await parser.parse(path.rel("test/specs/external/external.yaml"));
+    let parser = new $RefParser();
+    let schema = await parser.parse(path.rel("test/specs/external/external.yaml"));
     expect(schema).to.equal(parser.schema);
     expect(schema).to.deep.equal(parsedSchema.schema);
     expect(parser.$refs.paths()).to.deep.equal([path.abs("test/specs/external/external.yaml")]);
   });
 
   it("should parse successfully from a url", async () => {
-    const parser = new $RefParser();
-    const schema = await parser.parse(path.url("test/specs/external/external.yaml"));
+    let parser = new $RefParser();
+    let schema = await parser.parse(path.url("test/specs/external/external.yaml"));
     expect(schema).to.equal(parser.schema);
     expect(schema).to.deep.equal(parsedSchema.schema);
     expect(parser.$refs.paths()).to.deep.equal([path.url("test/specs/external/external.yaml")]);
@@ -79,8 +79,8 @@ describe("Schema with external $refs", () => {
   );
 
   it("should dereference successfully", async () => {
-    const parser = new $RefParser();
-    const schema = await parser.dereference(path.rel("test/specs/external/external.yaml"));
+    let parser = new $RefParser();
+    let schema = await parser.dereference(path.rel("test/specs/external/external.yaml"));
     expect(schema).to.equal(parser.schema);
     expect(schema).to.deep.equal(dereferencedSchema);
     // Reference equality
@@ -101,8 +101,8 @@ describe("Schema with external $refs", () => {
   });
 
   it("should bundle successfully", async () => {
-    const parser = new $RefParser();
-    const schema = await parser.bundle(path.rel("test/specs/external/external.yaml"));
+    let parser = new $RefParser();
+    let schema = await parser.bundle(path.rel("test/specs/external/external.yaml"));
     expect(schema).to.equal(parser.schema);
     expect(schema).to.deep.equal(bundledSchema);
   });

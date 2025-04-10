@@ -8,8 +8,8 @@ import { expect } from "vitest";
 
 describe("Schema without any $refs", () => {
   it("should parse successfully", async () => {
-    const parser = new $RefParser();
-    const schema = await parser.parse(path.rel("test/specs/no-refs/no-refs.yaml"));
+    let parser = new $RefParser();
+    let schema = await parser.parse(path.rel("test/specs/no-refs/no-refs.yaml"));
     expect(schema).to.equal(parser.schema);
     expect(schema).to.deep.equal(parsedSchema);
     expect(parser.$refs.paths()).to.deep.equal([path.abs("test/specs/no-refs/no-refs.yaml")]);
@@ -25,8 +25,8 @@ describe("Schema without any $refs", () => {
   );
 
   it("should dereference successfully", async () => {
-    const parser = new $RefParser();
-    const schema = await parser.dereference(path.rel("test/specs/no-refs/no-refs.yaml"));
+    let parser = new $RefParser();
+    let schema = await parser.dereference(path.rel("test/specs/no-refs/no-refs.yaml"));
     expect(schema).to.equal(parser.schema);
     expect(schema).to.deep.equal(parsedSchema);
     // The "circular" flag should NOT be set
@@ -34,8 +34,8 @@ describe("Schema without any $refs", () => {
   });
 
   it("should bundle successfully", async () => {
-    const parser = new $RefParser();
-    const schema = await parser.bundle(path.rel("test/specs/no-refs/no-refs.yaml"));
+    let parser = new $RefParser();
+    let schema = await parser.bundle(path.rel("test/specs/no-refs/no-refs.yaml"));
     expect(schema).to.equal(parser.schema);
     expect(schema).to.deep.equal(parsedSchema);
   });

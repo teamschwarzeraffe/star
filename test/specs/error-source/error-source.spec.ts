@@ -8,7 +8,7 @@ import { InvalidPointerError, ResolverError, MissingPointerError } from "../../.
 
 describe("Report correct error source and path for", () => {
   it("schema with broken reference", async () => {
-    let parser = new $RefParser();
+    const parser = new $RefParser();
     try {
       await parser.dereference({ foo: { bar: { $ref: "I do not exist" } } }, { continueOnError: true });
       helper.shouldNotGetCalled();
@@ -25,7 +25,7 @@ describe("Report correct error source and path for", () => {
   });
 
   it("schema with a local reference pointing at property with broken external reference", async () => {
-    let parser = new $RefParser();
+    const parser = new $RefParser();
     try {
       await parser.dereference(path.abs("test/specs/error-source/broken-external.json"), { continueOnError: true });
       helper.shouldNotGetCalled();
@@ -42,7 +42,7 @@ describe("Report correct error source and path for", () => {
   });
 
   it("schema with a missing local pointer and reference pointing at external file with broken external", async () => {
-    let parser = new $RefParser();
+    const parser = new $RefParser();
     try {
       await parser.dereference(path.abs("test/specs/error-source/invalid-external.json"), { continueOnError: true });
       helper.shouldNotGetCalled();
@@ -65,7 +65,7 @@ describe("Report correct error source and path for", () => {
   });
 
   it("schema with an invalid pointer", async () => {
-    let parser = new $RefParser();
+    const parser = new $RefParser();
     try {
       await parser.dereference(path.abs("test/specs/error-source/invalid-pointer.json"), { continueOnError: true });
       helper.shouldNotGetCalled();

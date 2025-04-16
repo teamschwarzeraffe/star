@@ -1,4 +1,4 @@
-let bundledSchema = {
+const bundledSchema = {
   self: {
     definitions: {
       thing: {

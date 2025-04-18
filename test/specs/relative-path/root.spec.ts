@@ -16,7 +16,7 @@ describe.skipIf(process.env.BROWSER)("Schemas with imports in relative and absol
       vi.restoreAllMocks();
     });
     it("should not parse successfully when set to resolve relative (default)", async () => {
-      let parser = new $RefParser();
+      const parser = new $RefParser();
       try {
         await parser.dereference(path.rel("schemas/accountList.json"));
         helper.shouldNotGetCalled();
@@ -26,8 +26,8 @@ describe.skipIf(process.env.BROWSER)("Schemas with imports in relative and absol
     });
 
     it("should parse successfully when set to resolve relative (default)", async () => {
-      let parser = new $RefParser();
-      let schema = await parser.dereference(path.rel("schemas/accountList.json"), {
+      const parser = new $RefParser();
+      const schema = await parser.dereference(path.rel("schemas/accountList.json"), {
         dereference: { externalReferenceResolution: "root" },
       });
       expect(schema).to.eql(parser.schema);
@@ -44,15 +44,15 @@ describe.skipIf(process.env.BROWSER)("Schemas with imports in relative and absol
       vi.restoreAllMocks();
     });
     it("should parse successfully when set to resolve relative (default)", async () => {
-      let parser = new $RefParser();
-      let schema = await parser.dereference(path.rel("schemas-relative/accountList.json"), {
+      const parser = new $RefParser();
+      const schema = await parser.dereference(path.rel("schemas-relative/accountList.json"), {
         dereference: { externalReferenceResolution: "relative" },
       });
       expect(schema).to.eql(parser.schema);
     });
 
     it("should not parse successfully when set to resolve relative (default)", async () => {
-      let parser = new $RefParser();
+      const parser = new $RefParser();
       try {
         await parser.dereference(path.rel("schemas-relative/accountList.json"), {
           dereference: { externalReferenceResolution: "root" },

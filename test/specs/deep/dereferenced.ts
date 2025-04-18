@@ -1,4 +1,4 @@
-const name = {
+let name = {
   required: ["first", "last"],
   type: "object",
   properties: {
